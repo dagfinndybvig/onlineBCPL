@@ -12,11 +12,11 @@ Currently running at:
 
 https://dagfinndybvig.github.io/onlineBCPL/
 
-Can be used with the clasic book:
+Can be used with the classic book:
 
 https://archive.org/details/richards1979bcpl/mode/2up
 
 Note: This is an old dialect of the language. I have created options in the UI to convert to uppercase/old style brackets during upload to accomodate the newer style of BCPL. However, other fixes may or may not be needed to make newer programs run.<br>
-To get a feel for the old syntax I recommend taking a look at the file cmpltest.b in the examples, which actually runs in the present system. 
+   To get a feel for the old syntax I recommend taking a look at the file cmpltest.b in the examples, which actually runs in the present system. 
 
 All hail Martin Richards, creator of BCPL!
