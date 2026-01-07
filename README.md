@@ -12,6 +12,6 @@ Can be used with the clasic book:
 
 https://archive.org/details/richards1979bcpl/mode/2up
 
-Note: This is an old dialect of the language. I have created options in the UI to convert to uppercase/old style brackets during upload to accomodate the newer syntax of BCPL. However, other fixes may or may not be needed to make newer programs run. 
+Note: This is an old dialect of the language. I have created options in the UI to convert to uppercase/old style brackets during upload to accomodate the newer style of BCPL. However, other fixes may or may not be needed to make newer programs run. 
 
 All hail Martin Richards, creator of BCPL!
