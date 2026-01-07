@@ -1,3 +1,6 @@
+<img width="3421" height="1277" alt="onlinebcpl" src="https://github.com/user-attachments/assets/aacae83d-95e5-439f-a4b9-00c8fabe1eee" />
+
+
 <h2>Based on old Richards tape via BCPL for C64 on Sourceforge</h2>
 
 Converted from https://sourceforge.net/projects/bcpl-c64/ with Github Copilot/Gemini 3 Pro
