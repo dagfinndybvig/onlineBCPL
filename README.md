@@ -1,6 +1,6 @@
 <h2>Based on old Richards tape via BCPL for C64 on Sourceforge</h2>
 
-Converted from https://sourceforge.net/projects/bcpl-c64/
+Converted from https://sourceforge.net/projects/bcpl-c64/ with help of Github Copilot/Gemini 3 Pro
 
 Vanilla html/javascript. Serve statically from root.
 
