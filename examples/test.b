@@ -1,1 +1,6 @@
-GET "LIBHDR"LET START() BE $( WRITES("ÈELLO THERE ÂÃÐÌ FANS!*N")$)
+
+GET "LIBHDR"
+
+LET START() BE $(
+ WRITES("Hello, World*N")
+$)
