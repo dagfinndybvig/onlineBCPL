@@ -1,4 +1,5 @@
 Based on old Richard Martins tape via BCPL for C64 on Sourceforge
+https://sourceforge.net/projects/bcpl-c64/
 
 Vanilla html/javascript. Serve statically from root.
 
