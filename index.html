@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BCPL Console</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Online BCPL Compiler</h1>
+    </header>
+
+    <div class="main-container">
+        <div class="panel">
+            <div class="panel-header">
+                <span>Tick boxes for conversion during upload</span>
+                <div>
+                     <input type="file" id="fileInput" accept=".b,.txt" style="display: none;" />
+                     <button id="uploadBtn">Upload File</button>
+                     <button id="downloadBtn">Download Source</button>
+                     <label style="font-size: 0.8em; margin: 0 5px;" title="Convert to Uppercase during upload">
+                        <input type="checkbox" id="uppercaseChk"> UPCASE
+                     </label>
+                     <label style="font-size: 0.8em; margin: 0 5px;" title="Convert { } to $( $) during upload">
+                        <input type="checkbox" id="braceChk"> { } TO $( $)
+                     </label>
+                     <button id="compileBtn">Build & Run</button>
+                </div>
+            </div>
+            <div class="panel-content">
+                <textarea id="editor" spellcheck="false"></textarea>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <span>Process Output</span>
+                <button id="clearBtn">Clear</button>
+            </div>
+            <div class="panel-content">
+                 <textarea id="output" readonly></textarea>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>In honour of Martin Richards</p>
+	
+<a href="https://sourceforge.net/projects/bcpl-c64/">Based on BCPL for C64 from Sourceforge</a>
+
+    </footer>
+
+    <!-- Load files -->
+    <script src="js/stdlib.js"></script>
+    <script src="js/bcpl.js"></script>
+    <script>
+        const editor = document.getElementById('editor');
+        const output = document.getElementById('output');
+        const compileBtn = document.getElementById('compileBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const fileInput = document.getElementById('fileInput');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const uppercaseChk = document.getElementById('uppercaseChk');
+        const braceChk = document.getElementById('braceChk');
+
+        uploadBtn.onclick = () => {
+            fileInput.click();
+        };
+
+        downloadBtn.onclick = () => {
+            const content = editor.value;
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'code.b';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        };
+
+        fileInput.onchange = (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                let content = e.target.result;
+                if (braceChk.checked) {
+                    content = content.replace(/{/g, "$(").replace(/}/g, "$)");
+                }
+                if (uppercaseChk.checked) {
+                    content = content.toUpperCase();
+                }
+                editor.value = content;
+                log(`Loaded file: ${file.name} ${uppercaseChk.checked ? '[UPCASE]' : ''} ${braceChk.checked ? '[BRACES]' : ''}\n`);
+            };
+            reader.readAsText(file);
+        };
+
+        // Load default code
+        if (BCPL_FILES["fact.b"]) {
+            editor.value = BCPL_FILES["fact.b"];
+        }
+
+        function log(msg) {
+            output.value += msg;
+            output.scrollTop = output.scrollHeight;
+        }
+
+        clearBtn.onclick = () => {
+            output.value = "";
+        };
+
+        compileBtn.onclick = () => {
+             output.value = "";
+             log("--- Starting Compilation ---\n");
+             
+             // Prepare the virtual file system
+             // We need fresh copies of everything because the compiler might modify them (memory alignment etc? No, but safer)
+             // Actually, Interpreter modifies 'files' object if it writes to them.
+             const files = { ...BCPL_FILES };
+             
+             // Save user code as main.b (or test.b in example)
+             // But valid BCPL requires us to specify input.
+             files["input.b"] = editor.value + "\n";
+
+             // Ensure libhdr is available regardless of case
+             files["LIBHDR"] = files["libhdr"];
+             
+             // Pre-create output files to ensure they exist
+             files["OCODE"] = "";
+             files["INTCODE"] = "";
+             
+             const queue = [
+             // 1. Compile BCPL to OCODE
+             { 
+                 name: "Compiler (Phase 1: Syntax & Trans)", 
+                 args: ["synitrni", "-iinput.b"],
+                 description: "Compiling BCPL to OCODE..."
+             },
+             // 2. Compile OCODE to INTCODE
+             {
+                  name: "Compiler (Phase 2: Code Gen)",
+                  args: ["cgi", "-iOCODE"], 
+                  description: "Compiling OCODE to INTCODE..."
+             },
+             // 3. Run INTCODE
+             {
+                 name: "Runtime",
+                 args: ["INTCODE"],
+                 description: "Executing INTCODE..."
+             }
+             ];
+
+             runQueue(queue, files);
+        };
+
+        function runQueue(queue, fsSnapshot) {
+            if (queue.length === 0) {
+                log("\n--- Execution Complete ---\n");
+                // Debug: dump OCODE/INTCODE sizes
+                if (fsSnapshot["OCODE"]) log(`DEBUG: OCODE size: ${fsSnapshot["OCODE"].length}\n`);
+if (fsSnapshot["INTCODE"]) {
+                     log(`DEBUG: INTCODE size: ${fsSnapshot["INTCODE"].length}\n`);
+                     log(`DEBUG: INTCODE content: ${fsSnapshot["INTCODE"].substring(0, 100)}...\n`);
+                 }
+                return;
+            }
+
+            const task = queue.shift();
+            log(task.description + "\n");
+
+            // We need a small timeout to let UI update
+            setTimeout(() => {
+                try {
+                     const interp = new BCPL(fsSnapshot, (text) => {
+                         log(text);
+                     });
+                     
+                     // Run
+                     const updatedFiles = interp.run(task.args); // returns updated fs
+                     
+                     // Check for failure (empty outputs)
+                     if (task.name.includes("Phase 1")) {
+                        if (!updatedFiles["OCODE"] || updatedFiles["OCODE"].length === 0) {
+                            log("ERROR: Phase 1 produced empty OCODE. Compilation failed. See console logs.\n");
+                            return;
+                        }
+                     }
+                     
+                     // Pass updated files to next stage
+                     runQueue(queue, updatedFiles);
+                     
+                } catch (e) {
+                    log("ERROR: " + e.message + "\n");
+                    console.error(e);
+                }
+            }, 50);
+        }
+
+    </script>
+</body>
+</html>
