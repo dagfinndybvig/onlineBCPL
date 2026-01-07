@@ -1,4 +1,4 @@
-<h2>Based on old Richard Martins tape via BCPL for C64 on Sourceforge</h2>
+<h2>Based on old Richards tape via BCPL for C64 on Sourceforge</h2>
 
 Converted from https://sourceforge.net/projects/bcpl-c64/
 
@@ -12,6 +12,6 @@ Can be used with the clasic book:
 
 https://archive.org/details/richards1979bcpl/mode/2up
 
-Note: This is an old dialect of the language.
+Note: This is an old dialect of the language. I have created options in the UI to convert to uppercase/old style brackets during upload to accomodate the newer syntax of BCPL. However, other fixes may or may not be needed to make newer programs run. 
 
-All hail Martin Richards!
+All hail Martin Richards, creator of BCPL!
