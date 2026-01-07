@@ -1,4 +1,5 @@
-<img width="3421" height="1277" alt="onlinebcpl" src="https://github.com/user-attachments/assets/aacae83d-95e5-439f-a4b9-00c8fabe1eee" />
+
+![onlinebcpl2](https://github.com/user-attachments/assets/792e1ba0-ec60-40c8-a233-4cf31e7e2923)
 
 
 <h2>Based on old Richards tape via BCPL for C64 on Sourceforge</h2>
