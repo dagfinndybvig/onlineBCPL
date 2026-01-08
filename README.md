@@ -20,4 +20,6 @@ Note: This is an old dialect of the language. I have created options in the UI t
 
 To get a feel for the old syntax I recommend taking a look at the file cmpltest.b in the examples, which actually runs in the present system. 
 
-All hail Martin Richards, creator of BCPL!
+If you have Node.js and want to run BCPL on the command line you can try https://github.com/dagfinndybvig/nodeBCPL
+
+
