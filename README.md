@@ -14,7 +14,7 @@ https://dagfinndybvig.github.io/onlineBCPL/
 
 Can be used with the classic book:
 
-![bcplbook_](https://github.com/user-attachments/assets/00b2618a-c4ac-45f0-80ef-962cf6da24b4)
+![bcplbook2](https://github.com/user-attachments/assets/be65b8ea-bb31-46c3-bd03-1e891db58802)
 
 https://archive.org/details/richards1979bcpl/mode/2up
 
