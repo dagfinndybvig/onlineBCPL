@@ -14,8 +14,6 @@ https://dagfinndybvig.github.io/onlineBCPL/
 
 Can be used with the classic book:
 
-![bcplbook2](https://github.com/user-attachments/assets/be65b8ea-bb31-46c3-bd03-1e891db58802)
-
 https://archive.org/details/richards1979bcpl/mode/2up
 
 Note: This is an old dialect of the language. I have created options in the UI to convert to uppercase/old style brackets during upload to accomodate the newer style of BCPL. However, other fixes may or may not be needed to make newer programs run.<br>
